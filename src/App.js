@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { connect } from "react-redux";
+import "./App.css";
+import CalcButton from "./components/button";
+import "./css/layouts.css";
+import SciButtons from "./components/sci-buttons";
+import BasicButtons from "./components/basic-buttons";
+import HistoryDisplay from "./components/history-display";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const mapStateToProps = (state) => {
+  return { output: state.output };
+};
+
+class _App extends React.Component {
+  
+  displayOutput = (output) => {
+    if (!output) return;
+    if (output.length > 7) {
+      return Number.parseFloat(output).toExponential(2);
+    } else {
+      return output;
+    }
+  };
+
+  render() {
+    return (
+      <div className="container">
+        <div className="calc-display col-lg-12">
+          {this.displayOutput(this.props.output)}
+        </div>
+        <HistoryDisplay />
+        <div className="calculator col-lg-12">
+          <SciButtons />
+          <BasicButtons />
+        </div>
+      </div>
+    );
+  }
 }
 
+const App = connect(mapStateToProps)(_App);
 export default App;
